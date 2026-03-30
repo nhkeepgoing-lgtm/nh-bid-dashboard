@@ -1,22 +1,15 @@
 name: NH농협 입찰공고 자동 크롤링
 
 on:
-  # 매일 오전 9시, 오후 2시 (KST = UTC+9)
   schedule:
-    - cron: '0 0 * * 1-5'   # KST 09:00 (월~금)
-    - cron: '0 5 * * 1-5'   # KST 14:00 (월~금)
-  # 수동 실행 허용
+    - cron: '0 0 * * 1-5'
+    - cron: '0 5 * * 1-5'
   workflow_dispatch:
-    inputs:
-      notify:
-        description: 'Slack 알림 전송 여부'
-        required: false
-        default: 'true'
 
 jobs:
   crawl:
     name: 입찰공고 크롤링
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     timeout-minutes: 30
 
     steps:
@@ -30,8 +23,7 @@ jobs:
           cache: 'pip'
 
       - name: Python 의존성 설치
-        run: |
-          pip install -r crawler/requirements.txt
+        run: pip install -r crawler/requirements.txt
 
       - name: Playwright Chromium 설치
         run: |
@@ -41,17 +33,14 @@ jobs:
       - name: 크롤링 실행
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-        run: |
-          python crawler/crawl.py
-          echo "크롤링 완료"
-          cat data/bids.json | python3 -c "import sys,json; d=json.load(sys.stdin); print(f'수집: {d[\"total\"]}건')"
+        run: python crawler/crawl.py
 
       - name: 변경사항 커밋 & 푸시
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add data/bids.json
-          git diff --staged --quiet || git commit -m "chore: 입찰공고 갱신 $(date +'%Y-%m-%d %H:%M KST')"
+          git diff --staged --quiet || git commit -m "chore: 입찰공고 갱신 $(date +'%Y-%m-%d %H:%M')"
           git push
 
       - name: 크롤링 결과 요약 출력
@@ -63,16 +52,11 @@ jobs:
           with open('data/bids.json') as f:
               d = json.load(f)
           print(f'총 {d[\"total\"]}건 수집')
-          print(f'생성시각: {d[\"generated_at\"]}')
-          for src_id, meta in d.get(\"sources\", {}).items():
-              status = meta.get(\"status\", \"?\")
-              count = meta.get(\"count\", 0)
-              name = meta.get(\"name\", src_id)
-              print(f'  {name}: {count}건 ({status})')
+          for src_id, meta in d.get('sources', {}).items():
+              print(f'  {meta[\"name\"]}: {meta[\"count\"]}건 ({meta[\"status\"]})')
             "
           fi
 
-  # GitHub Pages 배포 (선택적)
   deploy:
     name: GitHub Pages 배포
     needs: crawl
@@ -90,9 +74,9 @@ jobs:
       - name: 체크아웃
         uses: actions/checkout@v4
         with:
-          ref: main  # 크롤링 후 커밋된 최신 상태
+          ref: main
 
-      - name: data/ 폴더를 dashboard/public에 복사
+      - name: data 폴더 복사
         run: |
           mkdir -p dashboard/public/data
           cp data/bids.json dashboard/public/data/bids.json
