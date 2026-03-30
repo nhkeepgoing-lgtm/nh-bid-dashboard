@@ -1,0 +1,14 @@
+{
+  "generated_at": null,
+  "total": 0,
+  "sources": {
+    "nhlife":    {"name": "NH농협생명",        "url": "https://www.nhlife.co.kr/ho/ci/HOCI0008M00.nhl", "count": 0, "status": "pending"},
+    "nhfire":    {"name": "NH농협손해보험",     "url": "https://www.nhfire.co.kr/company/bbs/tenderList.nhfire", "count": 0, "status": "pending"},
+    "nhcapital": {"name": "NH농협캐피탈",       "url": "https://www.nhcapital.co.kr", "count": 0, "status": "pending"},
+    "firstepro": {"name": "범농협 통합구매",    "url": "https://www.first-epro.com", "count": 0, "status": "pending"},
+    "nhfngroup": {"name": "NH농협금융지주",     "url": "https://www.nhfngroup.com", "count": 0, "status": "pending"},
+    "nonghyup":  {"name": "농협몰",            "url": "https://www.nonghyup.com", "count": 0, "status": "pending"},
+    "nhabgroup": {"name": "NH농업지주",         "url": "https://www.nhabgroup.com", "count": 0, "status": "pending"}
+  },
+  "items": []
+}

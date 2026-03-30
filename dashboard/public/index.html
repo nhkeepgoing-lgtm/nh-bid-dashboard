@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NH농협 그룹 입찰공고 통합 대시보드</title>
+<style>
+:root {
+  --nh-blue: #004a9e;
+  --nh-blue-dark: #003474;
+  --nh-gold: #FFD600;
+  --nh-green: #00843D;
+  --bg: #f0f4f9;
+  --surface: #ffffff;
+  --surface2: #f7f9fc;
+  --border: #e0e8f4;
+  --text: #1a2033;
+  --muted: #6b7a99;
+  --radius: 10px;
+  --shadow: 0 2px 8px rgba(0,60,160,0.07);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, 'Pretendard', 'Malgun Gothic', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+/* ── 헤더 ─────────────────────────────── */
+.header {
+  background: linear-gradient(135deg, var(--nh-blue-dark) 0%, var(--nh-blue) 100%);
+  color: #fff;
+  padding: 0 28px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+}
+.logo { background: var(--nh-gold); color: var(--nh-blue-dark); font-weight: 900; font-size: 14px; padding: 4px 10px; border-radius: 5px; letter-spacing: -.5px; flex-shrink: 0; }
+.header-title { font-size: 16px; font-weight: 700; flex: 1; }
+.header-meta { font-size: 11px; opacity: .65; }
+.btn-hdr { background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.3); color: #fff; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600; transition: background .2s; }
+.btn-hdr:hover { background: rgba(255,255,255,.28); }
+.btn-hdr:disabled { opacity: .4; cursor: default; }
+.spin { display: inline-block; animation: spin .7s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── 레이아웃 ──────────────────────────── */
+.layout { display: flex; height: calc(100vh - 60px); }
+.sidebar { width: 220px; flex-shrink: 0; background: var(--surface); border-right: 1px solid var(--border); overflow-y: auto; padding: 16px 12px; }
+.main { flex: 1; overflow-y: auto; padding: 20px 24px; }
+
+/* ── 사이드바 ──────────────────────────── */
+.sidebar-section { margin-bottom: 20px; }
+.sidebar-label { font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; padding-left: 6px; }
+.src-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 7px 10px;
+  border-radius: 7px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+  font-size: 12px;
+  color: var(--text);
+  transition: background .15s;
+  margin-bottom: 2px;
+}
+.src-btn:hover { background: var(--surface2); }
+.src-btn.active { background: #e8f0fb; color: var(--nh-blue); font-weight: 700; }
+.src-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.src-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.src-count { font-size: 10px; background: #e8f0fb; color: var(--nh-blue); padding: 1px 6px; border-radius: 8px; font-weight: 700; }
+.src-count.err { background: #fde8e8; color: #c0392b; }
+
+/* ── 통계 카드 ─────────────────────────── */
+.stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+.stat { background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border); padding: 14px 16px; }
+.stat-label { font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 6px; }
+.stat-value { font-size: 26px; font-weight: 800; color: var(--nh-blue); line-height: 1; }
+.stat-value.green { color: #16a085; }
+.stat-value.red { color: #e74c3c; }
+.stat-sub { font-size: 10px; color: var(--muted); margin-top: 3px; }
+
+/* ── 검색/필터 바 ──────────────────────── */
+.toolbar { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+.search-wrap { position: relative; flex: 1; min-width: 200px; max-width: 400px; }
+.search-ico { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; }
+.search-input {
+  width: 100%;
+  padding: 9px 12px 9px 34px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  font-size: 13px;
+  background: var(--surface);
+  outline: none;
+  transition: border-color .2s;
+}
+.search-input:focus { border-color: var(--nh-blue); }
+.filter-select {
+  padding: 8px 12px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  font-size: 12px;
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  outline: none;
+}
+.toggle-new {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  padding: 8px 12px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  transition: all .15s;
+  user-select: none;
+}
+.toggle-new.on { background: #fde8e8; border-color: #e74c3c; color: #c0392b; font-weight: 700; }
+.result-info { font-size: 12px; color: var(--muted); margin-left: auto; }
+
+/* ── 테이블 ────────────────────────────── */
+.table-card { background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border); overflow: hidden; box-shadow: var(--shadow); }
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+thead th {
+  background: var(--surface2);
+  padding: 10px 14px;
+  text-align: left;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+}
+thead th:hover { color: var(--nh-blue); }
+thead th .sort-ico { opacity: .35; margin-left: 3px; }
+thead th.sorted .sort-ico { opacity: 1; color: var(--nh-blue); }
+tbody tr { transition: background .12s; }
+tbody tr:hover td { background: #f5f8ff; }
+tbody td { padding: 11px 14px; border-bottom: 1px solid #f0f5fb; vertical-align: top; }
+tbody tr:last-child td { border-bottom: none; }
+
+.td-title { max-width: 400px; }
+.bid-link { color: var(--nh-blue); font-weight: 600; text-decoration: none; line-height: 1.4; display: block; }
+.bid-link:hover { text-decoration: underline; }
+.bid-nolink { color: var(--text); font-weight: 500; line-height: 1.4; }
+.new-badge { display: inline-block; background: #e74c3c; color: #fff; font-size: 9px; font-weight: 700; padding: 1px 5px; border-radius: 3px; margin-left: 5px; vertical-align: middle; }
+.src-tag { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; padding: 2px 7px; border-radius: 8px; font-weight: 600; white-space: nowrap; }
+.date-text { font-size: 12px; color: var(--muted); white-space: nowrap; }
+.deadline-text { font-size: 12px; color: #c0392b; white-space: nowrap; font-weight: 600; }
+
+/* ── 로딩/비어있음/에러 ─────────────────── */
+.state-row td { text-align: center; padding: 40px; color: var(--muted); }
+.loader { display: inline-flex; align-items: center; gap: 10px; font-size: 13px; }
+.spinner { width: 20px; height: 20px; border: 2px solid var(--border); border-top-color: var(--nh-blue); border-radius: 50%; animation: spin .7s linear infinite; }
+
+/* ── 페이지네이션 ──────────────────────── */
+.pagination { display: flex; align-items: center; justify-content: center; gap: 6px; padding: 14px; border-top: 1px solid var(--border); }
+.pg-btn { padding: 5px 12px; border: 1px solid var(--border); border-radius: 6px; background: var(--surface); font-size: 12px; cursor: pointer; color: var(--text); transition: all .15s; }
+.pg-btn:hover { background: var(--surface2); }
+.pg-btn.active { background: var(--nh-blue); color: #fff; border-color: var(--nh-blue); font-weight: 700; }
+.pg-btn:disabled { opacity: .35; cursor: default; }
+
+/* ── 소스 상태 표시 ────────────────────── */
+.source-status-bar { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+.src-status-pill {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  border: 1px solid transparent;
+}
+.src-status-pill.ok { background: #e8f5e9; color: #2e7d32; border-color: #c8e6c9; }
+.src-status-pill.empty { background: #fff8e1; color: #f57f17; border-color: #ffe082; }
+.src-status-pill.error { background: #fde8e8; color: #c62828; border-color: #ffcdd2; }
+.status-dot { width: 6px; height: 6px; border-radius: 50%; }
+.status-dot.ok { background: #2e7d32; }
+.status-dot.empty { background: #f57f17; }
+.status-dot.error { background: #c62828; }
+
+/* ── 반응형 ────────────────────────────── */
+@media (max-width: 900px) {
+  .sidebar { display: none; }
+  .stats-row { grid-template-columns: repeat(2, 1fr); }
+  .td-deadline, th:nth-child(4) { display: none; }
+}
+@media (max-width: 600px) {
+  .main { padding: 12px; }
+  .stats-row { grid-template-columns: repeat(2, 1fr); }
+  .header-title { font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<!-- 헤더 -->
+<header class="header">
+  <span class="logo">NH</span>
+  <span class="header-title">농협 그룹 입찰공고 통합 대시보드</span>
+  <span class="header-meta" id="headerMeta">로딩 중...</span>
+  <button class="btn-hdr" id="btnRefresh" onclick="fetchData()">
+    <span id="refreshTxt">↻ 새로고침</span>
+  </button>
+</header>
+
+<div class="layout">
+
+  <!-- 사이드바 -->
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">기관 선택</div>
+      <button class="src-btn active" data-src="all" onclick="setSource('all', this)">
+        <span class="src-dot" style="background:#004a9e"></span>
+        <span class="src-name">전체</span>
+        <span class="src-count" id="cnt-all">—</span>
+      </button>
+      <button class="src-btn" data-src="nhlife" onclick="setSource('nhlife', this)">
+        <span class="src-dot" style="background:#1565C0"></span>
+        <span class="src-name">NH농협생명</span>
+        <span class="src-count" id="cnt-nhlife">—</span>
+      </button>
+      <button class="src-btn" data-src="nhfire" onclick="setSource('nhfire', this)">
+        <span class="src-dot" style="background:#e67e22"></span>
+        <span class="src-name">NH농협손보</span>
+        <span class="src-count" id="cnt-nhfire">—</span>
+      </button>
+      <button class="src-btn" data-src="nhcapital" onclick="setSource('nhcapital', this)">
+        <span class="src-dot" style="background:#27ae60"></span>
+        <span class="src-name">NH농협캐피탈</span>
+        <span class="src-count" id="cnt-nhcapital">—</span>
+      </button>
+      <button class="src-btn" data-src="firstepro" onclick="setSource('firstepro', this)">
+        <span class="src-dot" style="background:#8e44ad"></span>
+        <span class="src-name">범농협 통합구매</span>
+        <span class="src-count" id="cnt-firstepro">—</span>
+      </button>
+      <button class="src-btn" data-src="nhfngroup" onclick="setSource('nhfngroup', this)">
+        <span class="src-dot" style="background:#2980b9"></span>
+        <span class="src-name">NH금융지주</span>
+        <span class="src-count" id="cnt-nhfngroup">—</span>
+      </button>
+      <button class="src-btn" data-src="nonghyup" onclick="setSource('nonghyup', this)">
+        <span class="src-dot" style="background:#16a085"></span>
+        <span class="src-name">농협몰</span>
+        <span class="src-count" id="cnt-nonghyup">—</span>
+      </button>
+      <button class="src-btn" data-src="nhabgroup" onclick="setSource('nhabgroup', this)">
+        <span class="src-dot" style="background:#c0392b"></span>
+        <span class="src-name">NH농업지주</span>
+        <span class="src-count" id="cnt-nhabgroup">—</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- 메인 -->
+  <main class="main">
+
+    <!-- 통계 -->
+    <div class="stats-row">
+      <div class="stat">
+        <div class="stat-label">전체 공고</div>
+        <div class="stat-value" id="statTotal">—</div>
+        <div class="stat-sub">수집 항목</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">신규 (7일)</div>
+        <div class="stat-value red" id="statNew">—</div>
+        <div class="stat-sub">최근 등록</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">수집 성공</div>
+        <div class="stat-value green" id="statOk">—</div>
+        <div class="stat-sub">/ 7개 기관</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">최종 갱신</div>
+        <div class="stat-value" id="statUpdated" style="font-size:14px;padding-top:4px">—</div>
+        <div class="stat-sub">크롤링 시각</div>
+      </div>
+    </div>
+
+    <!-- 소스 상태 -->
+    <div class="source-status-bar" id="sourceStatusBar"></div>
+
+    <!-- 검색/필터 -->
+    <div class="toolbar">
+      <div class="search-wrap">
+        <svg class="search-ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="text" class="search-input" id="searchInput" placeholder="공고명 검색..." oninput="applyFilters()">
+      </div>
+      <select class="filter-select" id="sortSelect" onchange="applyFilters()">
+        <option value="date_desc">최신순</option>
+        <option value="date_asc">오래된순</option>
+        <option value="source">기관순</option>
+      </select>
+      <div class="toggle-new" id="toggleNew" onclick="toggleNew()">🔴 신규만</div>
+      <span class="result-info" id="resultInfo"></span>
+    </div>
+
+    <!-- 테이블 -->
+    <div class="table-card">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th onclick="sortBy('source_name')">기관 <span class="sort-ico">↕</span></th>
+              <th onclick="sortBy('title')">공고명 <span class="sort-ico">↕</span></th>
+              <th onclick="sortBy('date')">등록일 <span class="sort-ico">↕</span></th>
+              <th class="td-deadline" onclick="sortBy('deadline')">마감일 <span class="sort-ico">↕</span></th>
+              <th>원문</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+            <tr class="state-row"><td colspan="5"><div class="loader"><div class="spinner"></div>데이터 로딩 중...</div></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="pagination" id="pagination"></div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+// ─────────────────────────────────────────────
+// 설정
+// ─────────────────────────────────────────────
+// API 서버가 없을 때는 data/bids.json을 직접 사용
+const API_BASE = window.location.hostname === 'localhost'
+  ? 'http://localhost:3000/api'
+  : './data/bids.json';   // GitHub Pages: 정적 파일 직접 접근
+
+const USE_API = window.location.hostname === 'localhost';
+
+const SOURCE_COLORS = {
+  nhlife:    '#1565C0',
+  nhfire:    '#e67e22',
+  nhcapital: '#27ae60',
+  firstepro: '#8e44ad',
+  nhfngroup: '#2980b9',
+  nonghyup:  '#16a085',
+  nhabgroup: '#c0392b',
+};
+
+// ─────────────────────────────────────────────
+// 상태
+// ─────────────────────────────────────────────
+let allItems = [];
+let sourceMeta = {};
+let generatedAt = null;
+
+let filterSource = 'all';
+let filterNew = false;
+let sortField = 'date';
+let sortDir = 'desc';
+let searchQ = '';
+let currentPage = 1;
+const PAGE_SIZE = 25;
+
+// ─────────────────────────────────────────────
+// 데이터 로드
+// ─────────────────────────────────────────────
+async function fetchData() {
+  const btn = document.getElementById('btnRefresh');
+  const txt = document.getElementById('refreshTxt');
+  btn.disabled = true;
+  txt.innerHTML = '<span class="spin">↻</span> 로딩중';
+
+  try {
+    let data;
+    if (USE_API) {
+      // API 서버 모드
+      const [bidsRes, statsRes, sourcesRes] = await Promise.all([
+        fetch(`${API_BASE}/bids?limit=500`),
+        fetch(`${API_BASE}/stats`),
+        fetch(`${API_BASE}/sources`),
+      ]);
+      const bidsJson = await bidsRes.json();
+      const statsJson = await statsRes.json();
+      const sourcesJson = await sourcesRes.json();
+
+      allItems = bidsJson.items || [];
+      sourceMeta = sourcesJson.sources || {};
+      generatedAt = bidsJson.generated_at;
+    } else {
+      // 정적 파일 모드 (GitHub Pages)
+      const res = await fetch('./data/bids.json');
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      data = await res.json();
+      allItems = data.items || [];
+      sourceMeta = data.sources || {};
+      generatedAt = data.generated_at;
+    }
+
+    updateHeader();
+    updateStats();
+    updateSidebar();
+    updateSourceStatus();
+    applyFilters();
+  } catch (e) {
+    console.error(e);
+    document.getElementById('tableBody').innerHTML =
+      `<tr class="state-row"><td colspan="5">⚠ 데이터 로드 실패: ${e.message}<br><small>API 서버가 실행 중인지 확인하거나, data/bids.json 파일을 먼저 생성하세요.</small></td></tr>`;
+  }
+
+  btn.disabled = false;
+  txt.textContent = '↻ 새로고침';
+}
+
+// ─────────────────────────────────────────────
+// UI 업데이트
+// ─────────────────────────────────────────────
+function updateHeader() {
+  if (!generatedAt) return;
+  const d = new Date(generatedAt);
+  document.getElementById('headerMeta').textContent =
+    `갱신: ${d.getMonth()+1}/${d.getDate()} ${d.getHours().toString().padStart(2,'0')}:${d.getMinutes().toString().padStart(2,'0')}`;
+}
+
+function updateStats() {
+  const today = new Date().toISOString().slice(0, 10);
+  const sevenAgo = new Date(Date.now() - 7*864e5).toISOString().slice(0, 10);
+  const newCount = allItems.filter(i => i.date && i.date >= sevenAgo).length;
+  const okCount = Object.values(sourceMeta).filter(s => s.status === 'ok').length;
+
+  document.getElementById('statTotal').textContent = allItems.length.toLocaleString();
+  document.getElementById('statNew').textContent = newCount.toLocaleString();
+  document.getElementById('statOk').textContent = okCount;
+  if (generatedAt) {
+    const d = new Date(generatedAt);
+    document.getElementById('statUpdated').textContent =
+      `${d.getMonth()+1}/${d.getDate()} ${d.getHours()}:${d.getMinutes().toString().padStart(2,'0')}`;
+  }
+}
+
+function updateSidebar() {
+  const counts = { all: allItems.length };
+  for (const item of allItems) {
+    counts[item.source_id] = (counts[item.source_id] || 0) + 1;
+  }
+  for (const [id, cnt] of Object.entries(counts)) {
+    const el = document.getElementById(`cnt-${id}`);
+    if (el) {
+      el.textContent = cnt;
+      const meta = sourceMeta[id];
+      if (meta && meta.status === 'error') el.className = 'src-count err';
+    }
+  }
+}
+
+function updateSourceStatus() {
+  const bar = document.getElementById('sourceStatusBar');
+  const pills = Object.entries(sourceMeta).map(([id, meta]) => {
+    const cls = meta.status === 'ok' ? 'ok' : meta.status === 'error' ? 'error' : 'empty';
+    return `<div class="src-status-pill ${cls}">
+      <div class="status-dot ${cls}"></div>
+      <span>${meta.name}</span>
+      <span>${meta.count || 0}건</span>
+    </div>`;
+  });
+  bar.innerHTML = pills.join('');
+}
+
+// ─────────────────────────────────────────────
+// 필터 & 정렬 & 렌더
+// ─────────────────────────────────────────────
+function setSource(src, el) {
+  filterSource = src;
+  document.querySelectorAll('.src-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  currentPage = 1;
+  applyFilters();
+}
+
+function toggleNew() {
+  filterNew = !filterNew;
+  const el = document.getElementById('toggleNew');
+  el.classList.toggle('on', filterNew);
+  currentPage = 1;
+  applyFilters();
+}
+
+function sortBy(field) {
+  if (sortField === field) sortDir = sortDir === 'asc' ? 'desc' : 'asc';
+  else { sortField = field; sortDir = 'desc'; }
+  document.querySelectorAll('thead th').forEach(th => th.classList.remove('sorted'));
+  applyFilters();
+}
+
+function applyFilters() {
+  searchQ = document.getElementById('searchInput').value.toLowerCase().trim();
+  const sortSel = document.getElementById('sortSelect').value;
+  if (sortSel === 'date_desc') { sortField = 'date'; sortDir = 'desc'; }
+  else if (sortSel === 'date_asc') { sortField = 'date'; sortDir = 'asc'; }
+  else { sortField = 'source_name'; sortDir = 'asc'; }
+
+  const sevenAgo = new Date(Date.now() - 7*864e5).toISOString().slice(0, 10);
+
+  let filtered = allItems.filter(item => {
+    if (filterSource !== 'all' && item.source_id !== filterSource) return false;
+    if (filterNew && !(item.date && item.date >= sevenAgo)) return false;
+    if (searchQ && !(item.title || '').toLowerCase().includes(searchQ)) return false;
+    return true;
+  });
+
+  filtered.sort((a, b) => {
+    let va = (a[sortField] || '').toString();
+    let vb = (b[sortField] || '').toString();
+    return sortDir === 'asc' ? va.localeCompare(vb) : vb.localeCompare(va);
+  });
+
+  document.getElementById('resultInfo').textContent =
+    `${filtered.length.toLocaleString()}건`;
+
+  renderTable(filtered);
+  renderPagination(filtered.length);
+}
+
+function renderTable(items) {
+  const tbody = document.getElementById('tableBody');
+  const sevenAgo = new Date(Date.now() - 7*864e5).toISOString().slice(0, 10);
+
+  if (!items.length) {
+    tbody.innerHTML = '<tr class="state-row"><td colspan="5">검색 결과가 없습니다.</td></tr>';
+    return;
+  }
+
+  const start = (currentPage - 1) * PAGE_SIZE;
+  const page = items.slice(start, start + PAGE_SIZE);
+
+  tbody.innerHTML = page.map(item => {
+    const color = SOURCE_COLORS[item.source_id] || '#666';
+    const isNew = item.date && item.date >= sevenAgo;
+    const newBadge = isNew ? '<span class="new-badge">NEW</span>' : '';
+    const titleEl = item.link
+      ? `<a class="bid-link" href="${escHtml(item.link)}" target="_blank" rel="noopener">${escHtml(item.title)}${newBadge}</a>`
+      : `<span class="bid-nolink">${escHtml(item.title)}${newBadge}</span>`;
+
+    const srcTag = `<span class="src-tag" style="background:${color}18;color:${color};border:1px solid ${color}30">
+      <span style="width:6px;height:6px;border-radius:50%;background:${color};display:inline-block"></span>
+      ${escHtml(item.source_name)}
+    </span>`;
+
+    const linkIcon = item.link
+      ? `<a href="${escHtml(item.link)}" target="_blank" rel="noopener" style="color:${color};font-size:14px;text-decoration:none" title="원문 보기">↗</a>`
+      : `<span style="color:#ccc">—</span>`;
+
+    return `<tr>
+      <td>${srcTag}</td>
+      <td class="td-title">${titleEl}</td>
+      <td><span class="date-text">${item.date || '—'}</span></td>
+      <td class="td-deadline"><span class="${item.deadline ? 'deadline-text' : 'date-text'}">${item.deadline || '—'}</span></td>
+      <td>${linkIcon}</td>
+    </tr>`;
+  }).join('');
+}
+
+function renderPagination(total) {
+  const totalPages = Math.ceil(total / PAGE_SIZE);
+  const pg = document.getElementById('pagination');
+  if (totalPages <= 1) { pg.innerHTML = ''; return; }
+
+  let html = `<button class="pg-btn" onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}>‹ 이전</button>`;
+  const start = Math.max(1, currentPage - 2);
+  const end = Math.min(totalPages, currentPage + 2);
+  if (start > 1) html += `<button class="pg-btn" onclick="goPage(1)">1</button>`;
+  if (start > 2) html += `<span style="color:var(--muted);padding:0 4px">…</span>`;
+  for (let i = start; i <= end; i++) {
+    html += `<button class="pg-btn ${i===currentPage?'active':''}" onclick="goPage(${i})">${i}</button>`;
+  }
+  if (end < totalPages - 1) html += `<span style="color:var(--muted);padding:0 4px">…</span>`;
+  if (end < totalPages) html += `<button class="pg-btn" onclick="goPage(${totalPages})">${totalPages}</button>`;
+  html += `<button class="pg-btn" onclick="goPage(${currentPage+1})" ${currentPage===totalPages?'disabled':''}>다음 ›</button>`;
+  pg.innerHTML = html;
+}
+
+function goPage(p) {
+  currentPage = p;
+  applyFilters();
+  document.querySelector('.main').scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function escHtml(str) {
+  if (!str) return '';
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// 초기 로드
+fetchData();
+
+// 5분마다 자동 갱신
+setInterval(fetchData, 5 * 60 * 1000);
+</script>
+</body>
+</html>
