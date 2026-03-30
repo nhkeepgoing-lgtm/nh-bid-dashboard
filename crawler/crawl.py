@@ -1,17 +1,15 @@
 #!/usr/bin/env python3
 """
 NH농협 그룹 입찰공고 통합 크롤러
-각 계열사 사이트를 Playwright(헤드리스 브라우저)로 크롤링하여
-data/bids.json에 저장합니다.
+각 계열사 사이트를 크롤링하여 data/bids.json에 저장합니다.
 """
 
 import asyncio
 import json
 import os
 import re
-import sys
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime
 from pathlib import Path
 from typing import Optional
 
@@ -33,9 +31,9 @@ DATA_DIR = Path(__file__).parent.parent / "data"
 DATA_DIR.mkdir(exist_ok=True)
 OUTPUT_PATH = DATA_DIR / "bids.json"
 
-BROWSER_TIMEOUT = 30_000   # ms
-PAGE_WAIT = 3_000          # ms (동적 로딩 대기)
-MAX_ITEMS = 30             # 사이트당 최대 수집 건수
+BROWSER_TIMEOUT = 30_000
+PAGE_WAIT = 3_000
+MAX_ITEMS = 30
 
 USER_AGENT = (
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
@@ -47,7 +45,6 @@ USER_AGENT = (
 # 유틸리티
 # ─────────────────────────────────────────────
 def normalize_date(raw: str) -> Optional[str]:
-    """다양한 날짜 형식 → YYYY-MM-DD"""
     if not raw:
         return None
     raw = raw.strip()
@@ -73,16 +70,8 @@ def is_new(date_str: Optional[str], days: int = 7) -> bool:
         return False
 
 
-def make_bid(
-    source_id: str,
-    source_name: str,
-    title: str,
-    date: Optional[str] = None,
-    deadline: Optional[str] = None,
-    link: Optional[str] = None,
-    category: str = "입찰공고",
-    note: Optional[str] = None,
-) -> dict:
+def make_bid(source_id, source_name, title, date=None, deadline=None,
+             link=None, category="입찰공고", note=None):
     return {
         "id": f"{source_id}_{hash(title + str(date)) & 0xFFFFFF:06x}",
         "source_id": source_id,
@@ -99,30 +88,86 @@ def make_bid(
 
 
 # ─────────────────────────────────────────────
-# 크롤러 베이스
+# 1. 범농협 통합입찰 (nonghyup.com) ★ 핵심
+# URL: https://www.nonghyup.com/ecenter/bid/bidList.do
+# requests로 직접 파싱 가능 (JS 렌더링 불필요)
 # ─────────────────────────────────────────────
-class BaseCrawler:
-    source_id: str = ""
-    source_name: str = ""
-    url: str = ""
+class NonghyupBidCrawler:
+    source_id = "nonghyup_bid"
+    source_name = "범농협 통합입찰"
+    url = "https://www.nonghyup.com/ecenter/bid/bidList.do"
 
-    async def crawl(self, page) -> list[dict]:
-        raise NotImplementedError
+    def crawl_static(self) -> list[dict]:
+        """requests로 직접 HTML 파싱 - JS 렌더링 불필요"""
+        items = []
+        try:
+            headers = {
+                "User-Agent": USER_AGENT,
+                "Accept-Language": "ko-KR,ko;q=0.9",
+                "Referer": "https://www.nonghyup.com/",
+            }
+            resp = requests.get(self.url, headers=headers, timeout=20)
+            resp.encoding = "utf-8"
+            soup = BeautifulSoup(resp.text, "lxml")
 
-    def make(self, **kwargs) -> dict:
-        return make_bid(
-            source_id=self.source_id,
-            source_name=self.source_name,
-            **kwargs,
-        )
+            # 입찰공고 테이블 찾기
+            # <table> 안의 tbody > tr 구조
+            table = soup.find("table")
+            if not table:
+                logger.warning("[nonghyup_bid] 테이블을 찾을 수 없음")
+                return []
+
+            rows = table.find_all("tr")
+            logger.info(f"[nonghyup_bid] 발견된 행: {len(rows)}")
+
+            for row in rows:
+                cells = row.find_all("td")
+                if len(cells) < 4:
+                    continue
+
+                # 번호 셀이 숫자인지 확인 (헤더 행 제외)
+                num_text = cells[0].get_text(strip=True)
+                if not num_text.isdigit():
+                    continue
+
+                # 제목
+                title_cell = cells[1]
+                title_anchor = title_cell.find("a")
+                title = title_anchor.get_text(strip=True) if title_anchor else title_cell.get_text(strip=True)
+                # "새글" 텍스트 제거
+                title = title.replace("새글", "").strip()
+                if not title:
+                    continue
+
+                # 등록일 (4번째 셀)
+                date_str = normalize_date(cells[3].get_text(strip=True))
+
+                # 링크 구성
+                # 클릭 이벤트 방식이라 직접 링크가 없음 → 목록 페이지 링크 사용
+                link = self.url
+
+                items.append(make_bid(
+                    source_id=self.source_id,
+                    source_name=self.source_name,
+                    title=title,
+                    date=date_str,
+                    link=link,
+                ))
+
+                if len(items) >= MAX_ITEMS:
+                    break
+
+        except Exception as e:
+            logger.error(f"[nonghyup_bid] 오류: {e}")
+
+        logger.info(f"[nonghyup_bid] 수집 완료: {len(items)}건")
+        return items
 
 
 # ─────────────────────────────────────────────
-# NH농협생명 크롤러
-# 공지사항 목록에서 입찰공고 필터링
-# URL: https://www.nhlife.co.kr/ho/ci/HOCI0008M00.nhl
+# 2. NH농협생명 크롤러
 # ─────────────────────────────────────────────
-class NHLifeCrawler(BaseCrawler):
+class NHLifeCrawler:
     source_id = "nhlife"
     source_name = "NH농협생명"
     url = "https://www.nhlife.co.kr/ho/ci/HOCI0008M00.nhl"
@@ -133,82 +178,20 @@ class NHLifeCrawler(BaseCrawler):
             await page.goto(self.url, wait_until="networkidle", timeout=BROWSER_TIMEOUT)
             await page.wait_for_timeout(PAGE_WAIT)
 
-            # 목록 행 파싱
-            rows = await page.query_selector_all(".board_list li, .notice_list li, table tbody tr")
+            rows = await page.query_selector_all("table tbody tr")
             logger.info(f"[nhlife] 발견된 행: {len(rows)}")
 
             for row in rows[:MAX_ITEMS]:
                 try:
                     text = await row.inner_text()
-                    # 입찰 키워드 필터
                     if not any(kw in text for kw in ["입찰", "공고", "조달", "구매", "용역", "컨설팅"]):
-                        continue
-
-                    # 제목
-                    title_el = await row.query_selector("a, .title, td:nth-child(2)")
-                    if not title_el:
-                        continue
-                    title = await title_el.inner_text()
-                    title = title.strip()
-                    if not title or len(title) < 3:
-                        continue
-
-                    # 날짜
-                    date_el = await row.query_selector(".date, td:last-child, td:nth-child(3)")
-                    date_str = None
-                    if date_el:
-                        date_str = normalize_date(await date_el.inner_text())
-
-                    # 링크
-                    link = None
-                    anchor = await row.query_selector("a")
-                    if anchor:
-                        href = await anchor.get_attribute("href")
-                        if href:
-                            link = href if href.startswith("http") else f"https://www.nhlife.co.kr{href}"
-
-                    items.append(self.make(title=title, date=date_str, link=link))
-                except Exception as e:
-                    logger.debug(f"[nhlife] 행 파싱 오류: {e}")
-                    continue
-
-        except PlaywrightTimeout:
-            logger.warning(f"[nhlife] 타임아웃")
-        except Exception as e:
-            logger.error(f"[nhlife] 오류: {e}")
-
-        return items[:MAX_ITEMS]
-
-
-# ─────────────────────────────────────────────
-# NH농협손해보험 크롤러
-# URL: https://www.nhfire.co.kr/company/bbs/tenderList.nhfire
-# ─────────────────────────────────────────────
-class NHFireCrawler(BaseCrawler):
-    source_id = "nhfire"
-    source_name = "NH농협손해보험"
-    url = "https://www.nhfire.co.kr/company/bbs/tenderList.nhfire"
-
-    async def crawl(self, page) -> list[dict]:
-        items = []
-        try:
-            await page.goto(self.url, wait_until="networkidle", timeout=BROWSER_TIMEOUT)
-            await page.wait_for_timeout(PAGE_WAIT)
-
-            rows = await page.query_selector_all("table tbody tr, .board_list li")
-            logger.info(f"[nhfire] 발견된 행: {len(rows)}")
-
-            for row in rows[:MAX_ITEMS]:
-                try:
-                    cells = await row.query_selector_all("td")
-                    if len(cells) < 2:
                         continue
 
                     title_el = await row.query_selector("td:nth-child(2) a, td:nth-child(2)")
                     if not title_el:
                         continue
                     title = (await title_el.inner_text()).strip()
-                    if not title or title in ["제목", "번호"]:
+                    if not title or len(title) < 3:
                         continue
 
                     date_el = await row.query_selector("td:last-child")
@@ -219,14 +202,82 @@ class NHFireCrawler(BaseCrawler):
                     if anchor:
                         href = await anchor.get_attribute("href")
                         if href:
-                            link = href if href.startswith("http") else f"https://www.nhfire.co.kr{href}"
+                            link = href if href.startswith("http") else f"https://www.nhlife.co.kr{href}"
 
-                    items.append(self.make(title=title, date=date_str, link=link))
+                    items.append(make_bid(
+                        source_id=self.source_id,
+                        source_name=self.source_name,
+                        title=title, date=date_str, link=link
+                    ))
+                except Exception as e:
+                    logger.debug(f"[nhlife] 행 파싱 오류: {e}")
+
+        except Exception as e:
+            logger.error(f"[nhlife] 오류: {e}")
+
+        return items[:MAX_ITEMS]
+
+
+# ─────────────────────────────────────────────
+# 3. NH농협손해보험 크롤러
+# URL: https://www.nhfire.co.kr/company/bbs/tenderList.nhfire
+# ─────────────────────────────────────────────
+class NHFireCrawler:
+    source_id = "nhfire"
+    source_name = "NH농협손해보험"
+    url = "https://www.nhfire.co.kr/company/bbs/tenderList.nhfire"
+
+    async def crawl(self, page) -> list[dict]:
+        items = []
+        try:
+            await page.goto(self.url, wait_until="networkidle", timeout=BROWSER_TIMEOUT)
+            await page.wait_for_timeout(PAGE_WAIT)
+
+            # 정확한 테이블 선택: 번호/제목/첨부/등록일 구조
+            rows = await page.query_selector_all("table tbody tr")
+            logger.info(f"[nhfire] 발견된 행: {len(rows)}")
+
+            for row in rows[:MAX_ITEMS]:
+                try:
+                    cells = await row.query_selector_all("td")
+                    if len(cells) < 3:
+                        continue
+
+                    # 첫 번째 셀이 숫자(번호)인지 확인
+                    num_text = (await cells[0].inner_text()).strip()
+                    if not num_text.isdigit():
+                        continue
+
+                    # 제목 (두 번째 셀)
+                    title_el = await cells[1].query_selector("a")
+                    if not title_el:
+                        title_el = cells[1]
+                    title = (await title_el.inner_text()).strip()
+                    if not title or len(title) < 3:
+                        continue
+
+                    # 등록일 (마지막 셀)
+                    date_el = cells[-1]
+                    date_str = normalize_date(await date_el.inner_text())
+
+                    # 링크
+                    link = None
+                    anchor = await cells[1].query_selector("a")
+                    if anchor:
+                        href = await anchor.get_attribute("href")
+                        if href and href != "#":
+                            link = href if href.startswith("http") else f"https://www.nhfire.co.kr{href}"
+                    if not link:
+                        link = self.url
+
+                    items.append(make_bid(
+                        source_id=self.source_id,
+                        source_name=self.source_name,
+                        title=title, date=date_str, link=link
+                    ))
                 except Exception as e:
                     logger.debug(f"[nhfire] 행 파싱 오류: {e}")
 
-        except PlaywrightTimeout:
-            logger.warning(f"[nhfire] 타임아웃")
         except Exception as e:
             logger.error(f"[nhfire] 오류: {e}")
 
@@ -234,23 +285,21 @@ class NHFireCrawler(BaseCrawler):
 
 
 # ─────────────────────────────────────────────
-# NH농협캐피탈 크롤러
+# 4. NH농협캐피탈 크롤러
 # ─────────────────────────────────────────────
-class NHCapitalCrawler(BaseCrawler):
+class NHCapitalCrawler:
     source_id = "nhcapital"
     source_name = "NH농협캐피탈"
-    url = "https://www.nhcapital.co.kr/introduce/notice/bid"
+    url = "https://www.nhcapital.co.kr"
 
     async def crawl(self, page) -> list[dict]:
         items = []
         try:
-            # 공지사항 또는 입찰공고 페이지 탐색 시도
             candidate_urls = [
                 "https://www.nhcapital.co.kr/introduce/notice/bid",
                 "https://www.nhcapital.co.kr/introduce/notice",
-                "https://www.nhcapital.co.kr/board/notice",
+                "https://www.nhcapital.co.kr",
             ]
-            loaded = False
             for candidate in candidate_urls:
                 try:
                     await page.goto(candidate, wait_until="domcontentloaded", timeout=15_000)
@@ -258,39 +307,43 @@ class NHCapitalCrawler(BaseCrawler):
                     content = await page.content()
                     if len(content) > 5000:
                         self.url = candidate
-                        loaded = True
                         break
                 except Exception:
                     continue
 
-            if not loaded:
-                logger.warning("[nhcapital] 페이지 로드 실패")
-                return []
-
             await page.wait_for_timeout(PAGE_WAIT)
-            rows = await page.query_selector_all("table tbody tr, .board-list li, .list-item")
+            rows = await page.query_selector_all("table tbody tr")
             logger.info(f"[nhcapital] 발견된 행: {len(rows)}")
 
             for row in rows[:MAX_ITEMS]:
                 try:
-                    title_el = await row.query_selector("a, .title, td:nth-child(2)")
-                    if not title_el:
+                    cells = await row.query_selector_all("td")
+                    if len(cells) < 2:
                         continue
+
+                    num_text = (await cells[0].inner_text()).strip()
+                    if not num_text.isdigit():
+                        continue
+
+                    title_el = await cells[1].query_selector("a") or cells[1]
                     title = (await title_el.inner_text()).strip()
                     if not title or len(title) < 3:
                         continue
 
-                    date_el = await row.query_selector("td:last-child, .date")
-                    date_str = normalize_date(await date_el.inner_text()) if date_el else None
+                    date_str = normalize_date(await cells[-1].inner_text()) if cells else None
 
                     link = None
-                    anchor = await row.query_selector("a")
+                    anchor = await cells[1].query_selector("a")
                     if anchor:
                         href = await anchor.get_attribute("href")
                         if href:
                             link = href if href.startswith("http") else f"https://www.nhcapital.co.kr{href}"
 
-                    items.append(self.make(title=title, date=date_str, link=link))
+                    items.append(make_bid(
+                        source_id=self.source_id,
+                        source_name=self.source_name,
+                        title=title, date=date_str, link=link
+                    ))
                 except Exception as e:
                     logger.debug(f"[nhcapital] 행 파싱 오류: {e}")
 
@@ -301,75 +354,12 @@ class NHCapitalCrawler(BaseCrawler):
 
 
 # ─────────────────────────────────────────────
-# 범농협 통합구매 FIRSTePro 크롤러
+# 5. NH농협금융지주 크롤러
 # ─────────────────────────────────────────────
-class FirstEproCrawler(BaseCrawler):
-    source_id = "firstepro"
-    source_name = "범농협 통합구매 FIRSTePro"
-    url = "https://www.first-epro.com/bid/notice/list"
-
-    async def crawl(self, page) -> list[dict]:
-        items = []
-        try:
-            candidate_urls = [
-                "https://www.first-epro.com/bid/notice/list",
-                "https://www.first-epro.com/notice/list",
-                "https://www.first-epro.com",
-            ]
-            for candidate in candidate_urls:
-                try:
-                    await page.goto(candidate, wait_until="domcontentloaded", timeout=15_000)
-                    await page.wait_for_timeout(2000)
-                    content = await page.content()
-                    if len(content) > 3000:
-                        self.url = candidate
-                        break
-                except Exception:
-                    continue
-
-            await page.wait_for_timeout(PAGE_WAIT)
-            rows = await page.query_selector_all("table tbody tr, .bid-list li, .notice-list li")
-            logger.info(f"[firstepro] 발견된 행: {len(rows)}")
-
-            for row in rows[:MAX_ITEMS]:
-                try:
-                    title_el = await row.query_selector("a, .title, td:nth-child(2)")
-                    if not title_el:
-                        continue
-                    title = (await title_el.inner_text()).strip()
-                    if not title or len(title) < 3:
-                        continue
-
-                    date_el = await row.query_selector("td:last-child, .date, .reg-date")
-                    date_str = normalize_date(await date_el.inner_text()) if date_el else None
-
-                    deadline_el = await row.query_selector(".deadline, td:nth-child(4)")
-                    deadline_str = normalize_date(await deadline_el.inner_text()) if deadline_el else None
-
-                    link = None
-                    anchor = await row.query_selector("a")
-                    if anchor:
-                        href = await anchor.get_attribute("href")
-                        if href:
-                            link = href if href.startswith("http") else f"https://www.first-epro.com{href}"
-
-                    items.append(self.make(title=title, date=date_str, deadline=deadline_str, link=link))
-                except Exception as e:
-                    logger.debug(f"[firstepro] 행 파싱 오류: {e}")
-
-        except Exception as e:
-            logger.error(f"[firstepro] 오류: {e}")
-
-        return items[:MAX_ITEMS]
-
-
-# ─────────────────────────────────────────────
-# NH농협금융지주 크롤러 (requests 사용 가능 시도)
-# ─────────────────────────────────────────────
-class NHFnGroupCrawler(BaseCrawler):
+class NHFnGroupCrawler:
     source_id = "nhfngroup"
     source_name = "NH농협금융지주"
-    url = "https://www.nhfngroup.com/bid/list.do"
+    url = "https://www.nhfngroup.com"
 
     async def crawl(self, page) -> list[dict]:
         items = []
@@ -391,49 +381,38 @@ class NHFnGroupCrawler(BaseCrawler):
                     continue
 
             await page.wait_for_timeout(PAGE_WAIT)
-
-            # 입찰공고 링크 찾기
-            links = await page.query_selector_all("a")
-            bid_links = []
-            for link_el in links:
-                text = await link_el.inner_text()
-                href = await link_el.get_attribute("href") or ""
-                if "입찰" in text or "bid" in href.lower() or "공고" in text:
-                    bid_links.append((text.strip(), href))
-
-            # 클릭하여 목록 페이지 이동
-            for text, href in bid_links[:3]:
-                try:
-                    full_url = href if href.startswith("http") else f"https://www.nhfngroup.com{href}"
-                    await page.goto(full_url, wait_until="domcontentloaded", timeout=15_000)
-                    await page.wait_for_timeout(PAGE_WAIT)
-                    break
-                except Exception:
-                    continue
-
-            rows = await page.query_selector_all("table tbody tr, .board-list li")
+            rows = await page.query_selector_all("table tbody tr")
             logger.info(f"[nhfngroup] 발견된 행: {len(rows)}")
 
             for row in rows[:MAX_ITEMS]:
                 try:
-                    title_el = await row.query_selector("a, .subject, td:nth-child(2)")
-                    if not title_el:
+                    cells = await row.query_selector_all("td")
+                    if len(cells) < 2:
                         continue
+
+                    num_text = (await cells[0].inner_text()).strip()
+                    if not num_text.isdigit():
+                        continue
+
+                    title_el = await cells[1].query_selector("a") or cells[1]
                     title = (await title_el.inner_text()).strip()
                     if not title or len(title) < 3:
                         continue
 
-                    date_el = await row.query_selector("td:last-child, .date")
-                    date_str = normalize_date(await date_el.inner_text()) if date_el else None
+                    date_str = normalize_date(await cells[-1].inner_text()) if cells else None
 
                     link = None
-                    anchor = await row.query_selector("a")
+                    anchor = await cells[1].query_selector("a")
                     if anchor:
                         href = await anchor.get_attribute("href")
                         if href:
                             link = href if href.startswith("http") else f"https://www.nhfngroup.com{href}"
 
-                    items.append(self.make(title=title, date=date_str, link=link))
+                    items.append(make_bid(
+                        source_id=self.source_id,
+                        source_name=self.source_name,
+                        title=title, date=date_str, link=link
+                    ))
                 except Exception as e:
                     logger.debug(f"[nhfngroup] 행 파싱 오류: {e}")
 
@@ -444,74 +423,9 @@ class NHFnGroupCrawler(BaseCrawler):
 
 
 # ─────────────────────────────────────────────
-# 농협몰 크롤러 (nonghyup.com)
+# 6. NH농업지주 크롤러
 # ─────────────────────────────────────────────
-class NonghyupMallCrawler(BaseCrawler):
-    source_id = "nonghyup"
-    source_name = "농협몰"
-    url = "https://www.nonghyup.com"
-
-    async def crawl(self, page) -> list[dict]:
-        items = []
-        try:
-            candidate_urls = [
-                "https://www.nonghyupmall.com/pr/bid/list.do",
-                "https://www.nonghyup.com/pr/bid",
-                "https://www.nonghyup.com",
-            ]
-            loaded = False
-            for candidate in candidate_urls:
-                try:
-                    await page.goto(candidate, wait_until="domcontentloaded", timeout=15_000)
-                    await page.wait_for_timeout(2000)
-                    content = await page.content()
-                    if len(content) > 3000:
-                        self.url = candidate
-                        loaded = True
-                        break
-                except Exception:
-                    continue
-
-            if not loaded:
-                return []
-
-            await page.wait_for_timeout(PAGE_WAIT)
-            rows = await page.query_selector_all("table tbody tr, .board-list li")
-            logger.info(f"[nonghyup] 발견된 행: {len(rows)}")
-
-            for row in rows[:MAX_ITEMS]:
-                try:
-                    title_el = await row.query_selector("a, .subject, td:nth-child(2)")
-                    if not title_el:
-                        continue
-                    title = (await title_el.inner_text()).strip()
-                    if not title or len(title) < 3:
-                        continue
-
-                    date_el = await row.query_selector("td:last-child, .date")
-                    date_str = normalize_date(await date_el.inner_text()) if date_el else None
-
-                    link = None
-                    anchor = await row.query_selector("a")
-                    if anchor:
-                        href = await anchor.get_attribute("href")
-                        if href:
-                            link = href if href.startswith("http") else f"https://www.nonghyup.com{href}"
-
-                    items.append(self.make(title=title, date=date_str, link=link))
-                except Exception as e:
-                    logger.debug(f"[nonghyup] 행 파싱 오류: {e}")
-
-        except Exception as e:
-            logger.error(f"[nonghyup] 오류: {e}")
-
-        return items[:MAX_ITEMS]
-
-
-# ─────────────────────────────────────────────
-# NH농업지주 크롤러 (nhabgroup.com)
-# ─────────────────────────────────────────────
-class NHAbGroupCrawler(BaseCrawler):
+class NHAbGroupCrawler:
     source_id = "nhabgroup"
     source_name = "NH농업지주"
     url = "https://www.nhabgroup.com"
@@ -536,29 +450,38 @@ class NHAbGroupCrawler(BaseCrawler):
                     continue
 
             await page.wait_for_timeout(PAGE_WAIT)
-            rows = await page.query_selector_all("table tbody tr, .board-list li")
+            rows = await page.query_selector_all("table tbody tr")
             logger.info(f"[nhabgroup] 발견된 행: {len(rows)}")
 
             for row in rows[:MAX_ITEMS]:
                 try:
-                    title_el = await row.query_selector("a, .subject, td:nth-child(2)")
-                    if not title_el:
+                    cells = await row.query_selector_all("td")
+                    if len(cells) < 2:
                         continue
+
+                    num_text = (await cells[0].inner_text()).strip()
+                    if not num_text.isdigit():
+                        continue
+
+                    title_el = await cells[1].query_selector("a") or cells[1]
                     title = (await title_el.inner_text()).strip()
                     if not title or len(title) < 3:
                         continue
 
-                    date_el = await row.query_selector("td:last-child, .date")
-                    date_str = normalize_date(await date_el.inner_text()) if date_el else None
+                    date_str = normalize_date(await cells[-1].inner_text()) if cells else None
 
                     link = None
-                    anchor = await row.query_selector("a")
+                    anchor = await cells[1].query_selector("a")
                     if anchor:
                         href = await anchor.get_attribute("href")
                         if href:
                             link = href if href.startswith("http") else f"https://www.nhabgroup.com{href}"
 
-                    items.append(self.make(title=title, date=date_str, link=link))
+                    items.append(make_bid(
+                        source_id=self.source_id,
+                        source_name=self.source_name,
+                        title=title, date=date_str, link=link
+                    ))
                 except Exception as e:
                     logger.debug(f"[nhabgroup] 행 파싱 오류: {e}")
 
@@ -572,18 +495,46 @@ class NHAbGroupCrawler(BaseCrawler):
 # 메인 실행
 # ─────────────────────────────────────────────
 async def run_all():
-    crawlers = [
+    all_items = []
+    results_meta = {}
+
+    # ── 1) requests로 처리 가능한 사이트 먼저 (빠름) ──
+    static_crawlers = [
+        NonghyupBidCrawler(),   # 범농협 통합입찰 ★
+    ]
+
+    for crawler in static_crawlers:
+        logger.info(f"크롤링 시작 (정적): {crawler.source_name}")
+        try:
+            items = crawler.crawl_static()
+            all_items.extend(items)
+            results_meta[crawler.source_id] = {
+                "name": crawler.source_name,
+                "url": crawler.url,
+                "count": len(items),
+                "status": "ok" if items else "empty",
+                "last_crawled": datetime.now().isoformat(),
+            }
+            logger.info(f"  → {len(items)}건 수집")
+        except Exception as e:
+            logger.error(f"  → 실패: {e}")
+            results_meta[crawler.source_id] = {
+                "name": crawler.source_name,
+                "url": crawler.url,
+                "count": 0,
+                "status": "error",
+                "error": str(e),
+                "last_crawled": datetime.now().isoformat(),
+            }
+
+    # ── 2) Playwright 필요한 사이트 ──
+    playwright_crawlers = [
         NHLifeCrawler(),
         NHFireCrawler(),
         NHCapitalCrawler(),
-        FirstEproCrawler(),
         NHFnGroupCrawler(),
-        NonghyupMallCrawler(),
         NHAbGroupCrawler(),
     ]
-
-    all_items = []
-    results_meta = {}
 
     async with async_playwright() as pw:
         browser = await pw.chromium.launch(
@@ -596,8 +547,8 @@ async def run_all():
             ],
         )
 
-        for crawler in crawlers:
-            logger.info(f"크롤링 시작: {crawler.source_name} ({crawler.url})")
+        for crawler in playwright_crawlers:
+            logger.info(f"크롤링 시작 (브라우저): {crawler.source_name}")
             page = await browser.new_page(
                 user_agent=USER_AGENT,
                 extra_http_headers={"Accept-Language": "ko-KR,ko;q=0.9"},
@@ -643,34 +594,20 @@ async def run_all():
 
     logger.info(f"\n✅ 크롤링 완료: 총 {len(all_items)}건 → {OUTPUT_PATH}")
 
-    # 신규 공고 슬랙 알림 (SLACK_WEBHOOK 환경변수 설정 시)
+    # Slack 알림
     slack_url = os.environ.get("SLACK_WEBHOOK")
     if slack_url:
-        await send_slack_notification(slack_url, all_items, results_meta)
+        new_items = [i for i in all_items if i.get("is_new")]
+        if new_items:
+            try:
+                text = f"*NH농협 신규 입찰공고 {len(new_items)}건*\n"
+                for item in new_items[:10]:
+                    text += f"• [{item['source_name']}] {item['title']} `{item.get('date','')}`\n"
+                requests.post(slack_url, json={"text": text}, timeout=10)
+            except Exception as e:
+                logger.error(f"Slack 알림 실패: {e}")
 
     return output
-
-
-async def send_slack_notification(webhook_url: str, items: list, meta: dict):
-    """신규 공고(7일 이내)를 Slack으로 알림"""
-    try:
-        new_items = [i for i in items if i.get("is_new")]
-        if not new_items:
-            return
-
-        text = f"*NH농협 신규 입찰공고 {len(new_items)}건*\n"
-        for item in new_items[:10]:
-            link = item.get("link", "")
-            title = item.get("title", "")
-            date = item.get("date", "")
-            src = item.get("source_name", "")
-            text += f"• [{src}] <{link}|{title}> `{date}`\n"
-
-        payload = {"text": text}
-        resp = requests.post(webhook_url, json=payload, timeout=10)
-        logger.info(f"Slack 알림 전송: {resp.status_code}")
-    except Exception as e:
-        logger.error(f"Slack 알림 실패: {e}")
 
 
 if __name__ == "__main__":
