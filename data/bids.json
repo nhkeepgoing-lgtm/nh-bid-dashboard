@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-31T02:50:49.796413",
+  "generated_at": "2026-03-31T06:10:46.202293",
   "total": 12,
   "sources": {
     "nonghyup_bid": {
@@ -7,47 +7,73 @@
       "url": "https://www.nonghyup.com/ecenter/bid/bidList.do",
       "count": 10,
       "status": "ok",
-      "last_crawled": "2026-03-31T02:50:03.542642"
+      "last_crawled": "2026-03-31T06:09:51.831719"
     },
     "nhlife": {
       "name": "NH농협생명",
       "url": "https://www.nhlife.co.kr/ho/ci/HOCI0008M00.nhl",
       "count": 2,
       "status": "ok",
-      "last_crawled": "2026-03-31T02:50:12.872937"
+      "last_crawled": "2026-03-31T06:10:02.123533"
     },
     "nhfire": {
       "name": "NH농협손해보험",
       "url": "https://www.nhfire.co.kr/company/bbs/tenderList.nhfire",
       "count": 0,
       "status": "empty",
-      "last_crawled": "2026-03-31T02:50:22.015833"
+      "last_crawled": "2026-03-31T06:10:11.839804"
     },
     "nhcapital": {
       "name": "NH농협캐피탈",
       "url": "https://www.nhcapital.co.kr/introduce/notice/bid",
       "count": 0,
       "status": "empty",
-      "last_crawled": "2026-03-31T02:50:29.989543"
+      "last_crawled": "2026-03-31T06:10:20.204399"
     },
     "nhfngroup": {
       "name": "NH농협금융지주",
       "url": "https://www.nhfngroup.com",
       "count": 0,
       "status": "empty",
-      "last_crawled": "2026-03-31T02:50:44.573476"
+      "last_crawled": "2026-03-31T06:10:41.153047"
     },
     "nhabgroup": {
       "name": "NH농업지주",
       "url": "https://www.nhabgroup.com",
       "count": 0,
       "status": "empty",
-      "last_crawled": "2026-03-31T02:50:49.763975"
+      "last_crawled": "2026-03-31T06:10:46.167343"
     }
   },
   "items": [
     {
-      "id": "nonghyup_bid_df2ff1",
+      "id": "nonghyup_bid_e8474e",
+      "source_id": "nonghyup_bid",
+      "source_name": "범농협 통합입찰",
+      "title": "2026회계연도 농협하나로유통 회계자문용역 입찰 재공고",
+      "date": "2026-03-31",
+      "deadline": null,
+      "link": "https://www.nonghyup.com/ecenter/bid/bidList.do",
+      "category": "입찰공고",
+      "note": null,
+      "is_new": true,
+      "crawled_at": "2026-03-31T06:09:51.830182"
+    },
+    {
+      "id": "nonghyup_bid_18949b",
+      "source_id": "nonghyup_bid",
+      "source_name": "범농협 통합입찰",
+      "title": "상호금융 전기통신FDS(이상거래탐지) 모니터링 운영 입찰 공고(재공고)",
+      "date": "2026-03-31",
+      "deadline": null,
+      "link": "https://www.nonghyup.com/ecenter/bid/bidList.do",
+      "category": "입찰공고",
+      "note": null,
+      "is_new": true,
+      "crawled_at": "2026-03-31T06:09:51.830300"
+    },
+    {
+      "id": "nonghyup_bid_5a7516",
       "source_id": "nonghyup_bid",
       "source_name": "범농협 통합입찰",
       "title": "(은행) AI감리역 2.0 고도화 제한경쟁입찰 공고",
@@ -57,10 +83,10 @@
       "category": "입찰공고",
       "note": null,
       "is_new": true,
-      "crawled_at": "2026-03-31T02:50:03.540703"
+      "crawled_at": "2026-03-31T06:09:51.830366"
     },
     {
-      "id": "nonghyup_bid_65e79a",
+      "id": "nonghyup_bid_df2b7a",
       "source_id": "nonghyup_bid",
       "source_name": "범농협 통합입찰",
       "title": "『(금융지주)책무종합시스템 고도화 구축』 제한경쟁입찰 공고",
@@ -70,10 +96,10 @@
       "category": "입찰공고",
       "note": null,
       "is_new": true,
-      "crawled_at": "2026-03-31T02:50:03.540823"
+      "crawled_at": "2026-03-31T06:09:51.830421"
     },
     {
-      "id": "nonghyup_bid_3294e7",
+      "id": "nonghyup_bid_f937c0",
       "source_id": "nonghyup_bid",
       "source_name": "범농협 통합입찰",
       "title": "농협은행 울산본부 시설관리 용역 (미화/주차) 입찰 공고",
@@ -83,10 +109,10 @@
       "category": "입찰공고",
       "note": null,
       "is_new": true,
-      "crawled_at": "2026-03-31T02:50:03.540950"
+      "crawled_at": "2026-03-31T06:09:51.830473"
     },
     {
-      "id": "nonghyup_bid_b7ea9c",
+      "id": "nonghyup_bid_c5147c",
       "source_id": "nonghyup_bid",
       "source_name": "범농협 통합입찰",
       "title": "2026년 농협중앙회 회계자문용역",
@@ -96,10 +122,10 @@
       "category": "입찰공고",
       "note": null,
       "is_new": true,
-      "crawled_at": "2026-03-31T02:50:03.541038"
+      "crawled_at": "2026-03-31T06:09:51.830551"
     },
     {
-      "id": "nonghyup_bid_924f74",
+      "id": "nonghyup_bid_591a2f",
       "source_id": "nonghyup_bid",
       "source_name": "범농협 통합입찰",
       "title": "「농협방송(NHTV) 방송장비 구매」계약 입찰 공고",
@@ -109,10 +135,10 @@
       "category": "입찰공고",
       "note": null,
       "is_new": true,
-      "crawled_at": "2026-03-31T02:50:03.541121"
+      "crawled_at": "2026-03-31T06:09:51.830619"
     },
     {
-      "id": "nonghyup_bid_ffb3c3",
+      "id": "nonghyup_bid_95aa48",
       "source_id": "nonghyup_bid",
       "source_name": "범농협 통합입찰",
       "title": "NH투자증권 VDI스토리지용 SAN스위치 구매 입찰 공고",
@@ -122,10 +148,10 @@
       "category": "입찰공고",
       "note": null,
       "is_new": true,
-      "crawled_at": "2026-03-31T02:50:03.541202"
+      "crawled_at": "2026-03-31T06:09:51.830674"
     },
     {
-      "id": "nonghyup_bid_3a3ca8",
+      "id": "nonghyup_bid_4e4a84",
       "source_id": "nonghyup_bid",
       "source_name": "범농협 통합입찰",
       "title": "고령축산물공판장 우·돈 가공지방 판매 입찰공고",
@@ -135,10 +161,10 @@
       "category": "입찰공고",
       "note": null,
       "is_new": true,
-      "crawled_at": "2026-03-31T02:50:03.541297"
+      "crawled_at": "2026-03-31T06:09:51.830724"
     },
     {
-      "id": "nonghyup_bid_743ce4",
+      "id": "nonghyup_bid_21838b",
       "source_id": "nonghyup_bid",
       "source_name": "범농협 통합입찰",
       "title": "농협 상호금융 스테이블코인 대응 전략 컨설팅 용역 입찰 공고",
@@ -148,36 +174,10 @@
       "category": "입찰공고",
       "note": null,
       "is_new": true,
-      "crawled_at": "2026-03-31T02:50:03.541381"
+      "crawled_at": "2026-03-31T06:09:51.830775"
     },
     {
-      "id": "nonghyup_bid_8f0bbe",
-      "source_id": "nonghyup_bid",
-      "source_name": "범농협 통합입찰",
-      "title": "고령축산물공판장 도축 우지방/돈 잡품 판매계약 입찰공고",
-      "date": "2026-03-25",
-      "deadline": null,
-      "link": "https://www.nonghyup.com/ecenter/bid/bidList.do",
-      "category": "입찰공고",
-      "note": null,
-      "is_new": true,
-      "crawled_at": "2026-03-31T02:50:03.541461"
-    },
-    {
-      "id": "nonghyup_bid_e59d68",
-      "source_id": "nonghyup_bid",
-      "source_name": "범농협 통합입찰",
-      "title": "「(손해)고객중심 디지털채널 전환 구축(외부감리)」 제한경쟁입찰 공고",
-      "date": "2026-03-24",
-      "deadline": null,
-      "link": "https://www.nonghyup.com/ecenter/bid/bidList.do",
-      "category": "입찰공고",
-      "note": null,
-      "is_new": true,
-      "crawled_at": "2026-03-31T02:50:03.541536"
-    },
-    {
-      "id": "nhlife_479f15",
+      "id": "nhlife_fd6eba",
       "source_id": "nhlife",
       "source_name": "NH농협생명",
       "title": "계리감독 선진화 대응 사업비 배분 고도화 컨설팅\n[NH농협생명] 계리감독 선진화 대응 사업비 배분 고도화 컨설팅을 위한 입찰제안요청서(RFP).hwp",
@@ -187,10 +187,10 @@
       "category": "입찰공고",
       "note": null,
       "is_new": false,
-      "crawled_at": "2026-03-31T02:50:12.865999"
+      "crawled_at": "2026-03-31T06:10:02.115639"
     },
     {
-      "id": "nhlife_df1447",
+      "id": "nhlife_f24584",
       "source_id": "nhlife",
       "source_name": "NH농협생명",
       "title": "[입찰] 계리감독 선진화 대응 사업비 배분 고도화 컨설팅",
@@ -200,7 +200,7 @@
       "category": "입찰공고",
       "note": null,
       "is_new": false,
-      "crawled_at": "2026-03-31T02:50:12.838300"
+      "crawled_at": "2026-03-31T06:10:02.086086"
     }
   ]
 }
