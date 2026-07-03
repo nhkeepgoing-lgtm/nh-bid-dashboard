@@ -1,137 +1,53 @@
 {
-  "generated_at": "2026-07-02T08:00:11.317985",
-  "total": 54,
+  "generated_at": "2026-07-03T03:44:08.423071",
+  "total": 44,
   "sources": {
     "nonghyup_bid": {
       "name": "범농협 통합구매",
       "url": "https://www.nonghyup.com/ecenter/bid/bidList.do",
-      "count": 10,
-      "status": "ok",
-      "last_crawled": "2026-07-02T07:59:09.234691"
+      "count": 0,
+      "status": "empty",
+      "last_crawled": "2026-07-03T03:43:06.984226"
     },
     "nhfngroup": {
       "name": "NH농협금융지주",
       "url": "https://www.nhfngroup.com/user/indexSub.do?codyMenuSeq=1102093359&siteId=nhfngroup",
       "count": 15,
       "status": "ok",
-      "last_crawled": "2026-07-02T07:59:11.935455"
+      "last_crawled": "2026-07-03T03:43:09.456067"
     },
     "nhabgroup": {
       "name": "농협경제지주",
       "url": "http://www.nhabgroup.com/user/indexSub.do?codyMenuSeq=602309274&siteId=nhabgroup",
       "count": 15,
       "status": "ok",
-      "last_crawled": "2026-07-02T07:59:15.608251"
+      "last_crawled": "2026-07-03T03:43:12.478360"
     },
     "nhcapital": {
       "name": "NH농협캐피탈",
       "url": "https://www.nhcapital.co.kr/customer/customer/customerManageposts/selectManagepostsNoticeList.nh",
       "count": 14,
       "status": "ok",
-      "last_crawled": "2026-07-02T07:59:18.442239"
+      "last_crawled": "2026-07-03T03:43:15.274424"
     },
     "nhfire": {
       "name": "NH농협손해보험",
       "url": "https://www.nhfire.co.kr/company/bbs/tenderList.nhfire",
       "count": 0,
       "status": "empty",
-      "last_crawled": "2026-07-02T08:00:00.341291"
+      "last_crawled": "2026-07-03T03:43:57.589840"
     },
     "nhlife": {
       "name": "NH농협생명보험",
       "url": "https://www.nhlife.co.kr/ho/ci/HOCI0008M00.nhl",
       "count": 0,
       "status": "empty",
-      "last_crawled": "2026-07-02T08:00:11.268377"
+      "last_crawled": "2026-07-03T03:44:08.383842"
     }
   },
   "items": [
     {
-      "id": "nonghyup_bid_b54aa6",
-      "source_id": "nonghyup_bid",
-      "source_name": "범농협 통합구매",
-      "title": "부천축산물공판장 우·돈 도축지방 판매 입찰공고",
-      "date": "2026-07-02",
-      "deadline": null,
-      "link": "https://www.nonghyup.com#none",
-      "category": "입찰공고",
-      "is_new": true,
-      "crawled_at": "2026-07-02T07:59:09.233251"
-    },
-    {
-      "id": "nonghyup_bid_08b6d0",
-      "source_id": "nonghyup_bid",
-      "source_name": "범농협 통합구매",
-      "title": "음성축산물공판장 우·돈 도축지방 판매 입찰 공고",
-      "date": "2026-07-02",
-      "deadline": null,
-      "link": "https://www.nonghyup.com#none",
-      "category": "입찰공고",
-      "is_new": true,
-      "crawled_at": "2026-07-02T07:59:09.233357"
-    },
-    {
-      "id": "nonghyup_bid_d4b8a9",
-      "source_id": "nonghyup_bid",
-      "source_name": "범농협 통합구매",
-      "title": "「(손해)Dell 스토리지 PMAX2500 구매(노후서버교체)」 일반경쟁입찰 공고",
-      "date": "2026-07-01",
-      "deadline": null,
-      "link": "https://www.nonghyup.com#none",
-      "category": "입찰공고",
-      "is_new": true,
-      "crawled_at": "2026-07-02T07:59:09.233424"
-    },
-    {
-      "id": "nonghyup_bid_e66a51",
-      "source_id": "nonghyup_bid",
-      "source_name": "범농협 통합구매",
-      "title": "「(공통)침투 및 공격 자동화 솔루션 도입」 제한경쟁입찰 공고",
-      "date": "2026-07-01",
-      "deadline": null,
-      "link": "https://www.nonghyup.com#none",
-      "category": "입찰공고",
-      "is_new": true,
-      "crawled_at": "2026-07-02T07:59:09.233480"
-    },
-    {
-      "id": "nonghyup_bid_4de719",
-      "source_id": "nonghyup_bid",
-      "source_name": "범농협 통합구매",
-      "title": "(증권)데이터 레이크하우스 구축",
-      "date": "2026-07-01",
-      "deadline": null,
-      "link": "https://www.nonghyup.com#none",
-      "category": "입찰공고",
-      "is_new": true,
-      "crawled_at": "2026-07-02T07:59:09.233532"
-    },
-    {
-      "id": "nonghyup_bid_fe2872",
-      "source_id": "nonghyup_bid",
-      "source_name": "범농협 통합구매",
-      "title": "고령축산물공판장 우·돈 가공지방 판매 입찰공고",
-      "date": "2026-07-01",
-      "deadline": null,
-      "link": "https://www.nonghyup.com#none",
-      "category": "입찰공고",
-      "is_new": true,
-      "crawled_at": "2026-07-02T07:59:09.233586"
-    },
-    {
-      "id": "nonghyup_bid_058fe7",
-      "source_id": "nonghyup_bid",
-      "source_name": "범농협 통합구매",
-      "title": "고령축산물공판장 도축 우지방/돈 잡품 판매계약 입찰공고",
-      "date": "2026-07-01",
-      "deadline": null,
-      "link": "https://www.nonghyup.com#none",
-      "category": "입찰공고",
-      "is_new": true,
-      "crawled_at": "2026-07-02T07:59:09.233644"
-    },
-    {
-      "id": "nhcapital_2c6911",
+      "id": "nhcapital_df9ccd",
       "source_id": "nhcapital",
       "source_name": "NH농협캐피탈",
       "title": "NH농협캐피탈 지능형 업무 지식 정보검색 서비스 사업 입찰공고(안)",
@@ -140,34 +56,10 @@
       "link": "https://www.nhcapital.co.kr/customer/customer/customerManageposts/selectManagepostsNoticeList.nh",
       "category": "입찰공고",
       "is_new": true,
-      "crawled_at": "2026-07-02T07:59:18.440434"
+      "crawled_at": "2026-07-03T03:43:15.272532"
     },
     {
-      "id": "nonghyup_bid_4e0fe0",
-      "source_id": "nonghyup_bid",
-      "source_name": "범농협 통합구매",
-      "title": "「(손해) IBM서버 E1150 구매(노후서버교체)」 일반경쟁입찰 공고",
-      "date": "2026-06-30",
-      "deadline": null,
-      "link": "https://www.nonghyup.com#none",
-      "category": "입찰공고",
-      "is_new": true,
-      "crawled_at": "2026-07-02T07:59:09.233698"
-    },
-    {
-      "id": "nonghyup_bid_6a0dc6",
-      "source_id": "nonghyup_bid",
-      "source_name": "범농협 통합구매",
-      "title": "[제2회 농협중앙회장배 농업인 파크골프대회 기획·운영 용역]",
-      "date": "2026-06-30",
-      "deadline": null,
-      "link": "https://www.nonghyup.com#none",
-      "category": "입찰공고",
-      "is_new": true,
-      "crawled_at": "2026-07-02T07:59:09.233773"
-    },
-    {
-      "id": "nhcapital_00cd45",
+      "id": "nhcapital_1e1fc6",
       "source_id": "nhcapital",
       "source_name": "NH농협캐피탈",
       "title": "NH농협캐피탈 26년 제2차 채권 매각 사실 공지",
@@ -176,22 +68,10 @@
       "link": "https://www.nhcapital.co.kr/customer/customer/customerManageposts/selectManagepostsNoticeList.nh",
       "category": "입찰공고",
       "is_new": true,
-      "crawled_at": "2026-07-02T07:59:18.440504"
+      "crawled_at": "2026-07-03T03:43:15.272606"
     },
     {
-      "id": "nonghyup_bid_64abb8",
-      "source_id": "nonghyup_bid",
-      "source_name": "범농협 통합구매",
-      "title": "『(공통)방화벽 운영 자동화시스템 고도화』 제한경쟁입찰 공고",
-      "date": "2026-06-29",
-      "deadline": null,
-      "link": "https://www.nonghyup.com#none",
-      "category": "입찰공고",
-      "is_new": true,
-      "crawled_at": "2026-07-02T07:59:09.233825"
-    },
-    {
-      "id": "nhfngroup_a32ff6",
+      "id": "nhfngroup_6fedec",
       "source_id": "nhfngroup",
       "source_name": "NH농협금융지주",
       "title": "(재공고)「2026년 내부회계관리제도 평가지원 용역」 입찰공고",
@@ -200,10 +80,10 @@
       "link": "https://www.nhfngroup.comboardList.do?command=view&page=1&boardId=5177627&boardSeq=5877626&id=",
       "category": "입찰공고",
       "is_new": true,
-      "crawled_at": "2026-07-02T07:59:11.933721"
+      "crawled_at": "2026-07-03T03:43:09.454074"
     },
     {
-      "id": "nhabgroup_21c088",
+      "id": "nhabgroup_6909a7",
       "source_id": "nhabgroup",
       "source_name": "농협경제지주",
       "title": "축산자재 구매 입찰 공고(OPU 수정란 생산장비)",
@@ -212,10 +92,10 @@
       "link": "http://www.nhabgroup.comboardList.do?command=view&page=1&boardId=5121866&boardSeq=5877825&id=",
       "category": "입찰공고",
       "is_new": true,
-      "crawled_at": "2026-07-02T07:59:15.607351"
+      "crawled_at": "2026-07-03T03:43:12.477341"
     },
     {
-      "id": "nhabgroup_d34d50",
+      "id": "nhabgroup_24fa31",
       "source_id": "nhabgroup",
       "source_name": "농협경제지주",
       "title": "나주축산물공판장 돈 예냉실 1,4번 냉동기 증설공사 입찰 공고",
@@ -224,10 +104,10 @@
       "link": "http://www.nhabgroup.comboardList.do?command=view&page=1&boardId=5121866&boardSeq=5877536&id=",
       "category": "입찰공고",
       "is_new": true,
-      "crawled_at": "2026-07-02T07:59:15.607410"
+      "crawled_at": "2026-07-03T03:43:12.477404"
     },
     {
-      "id": "nhabgroup_ff17ab",
+      "id": "nhabgroup_6baa4e",
       "source_id": "nhabgroup",
       "source_name": "농협경제지주",
       "title": "(재공고) 농협VAN시스템 노후 서버 교체 및 S/W 업그레이드 구축 사업",
@@ -236,10 +116,10 @@
       "link": "http://www.nhabgroup.comboardList.do?command=view&page=1&boardId=5121866&boardSeq=5877316&id=",
       "category": "입찰공고",
       "is_new": true,
-      "crawled_at": "2026-07-02T07:59:15.607460"
+      "crawled_at": "2026-07-03T03:43:12.477453"
     },
     {
-      "id": "nhabgroup_67bfbc",
+      "id": "nhabgroup_3578bb",
       "source_id": "nhabgroup",
       "source_name": "농협경제지주",
       "title": "농협경제지주 수입톱밥 물류대행 계약 단가 입찰",
@@ -248,10 +128,10 @@
       "link": "http://www.nhabgroup.comboardList.do?command=view&page=1&boardId=5121866&boardSeq=5877313&id=",
       "category": "입찰공고",
       "is_new": true,
-      "crawled_at": "2026-07-02T07:59:15.607512"
+      "crawled_at": "2026-07-03T03:43:12.477501"
     },
     {
-      "id": "nhabgroup_2d4d7c",
+      "id": "nhabgroup_36fbd1",
       "source_id": "nhabgroup",
       "source_name": "농협경제지주",
       "title": "’26년 종돈개량사업소 (불갑GGP)전기 승압 공사 입찰공고",
@@ -260,10 +140,10 @@
       "link": "http://www.nhabgroup.comboardList.do?command=view&page=1&boardId=5121866&boardSeq=5876337&id=",
       "category": "입찰공고",
       "is_new": false,
-      "crawled_at": "2026-07-02T07:59:15.607558"
+      "crawled_at": "2026-07-03T03:43:12.477548"
     },
     {
-      "id": "nhabgroup_c537fd",
+      "id": "nhabgroup_f87c63",
       "source_id": "nhabgroup",
       "source_name": "농협경제지주",
       "title": "나주축산물공판장 도축 부대시설 확충공사 도입 입찰 공고",
@@ -272,10 +152,10 @@
       "link": "http://www.nhabgroup.comboardList.do?command=view&page=1&boardId=5121866&boardSeq=5876144&id=",
       "category": "입찰공고",
       "is_new": false,
-      "crawled_at": "2026-07-02T07:59:15.607604"
+      "crawled_at": "2026-07-03T03:43:12.477595"
     },
     {
-      "id": "nhabgroup_372a2c",
+      "id": "nhabgroup_3278fe",
       "source_id": "nhabgroup",
       "source_name": "농협경제지주",
       "title": "「2026년 경기도 축산진흥대회」 행사 대행 용역 입찰 공고",
@@ -284,10 +164,10 @@
       "link": "http://www.nhabgroup.comboardList.do?command=view&page=1&boardId=5121866&boardSeq=5876141&id=",
       "category": "입찰공고",
       "is_new": false,
-      "crawled_at": "2026-07-02T07:59:15.607648"
+      "crawled_at": "2026-07-03T03:43:12.477640"
     },
     {
-      "id": "nhabgroup_328a15",
+      "id": "nhabgroup_95c8fa",
       "source_id": "nhabgroup",
       "source_name": "농협경제지주",
       "title": "‘26년 경기 한우 고급육 평가대회 행사 대행 용역 입찰 공고",
@@ -296,10 +176,10 @@
       "link": "http://www.nhabgroup.comboardList.do?command=view&page=1&boardId=5121866&boardSeq=5876138&id=",
       "category": "입찰공고",
       "is_new": false,
-      "crawled_at": "2026-07-02T07:59:15.607695"
+      "crawled_at": "2026-07-03T03:43:12.477709"
     },
     {
-      "id": "nhcapital_1ad9d6",
+      "id": "nhcapital_7c9b99",
       "source_id": "nhcapital",
       "source_name": "NH농협캐피탈",
       "title": "NH농협캐피탈 생활환경가전 렌탈 사업자 선정 입찰 공고",
@@ -308,10 +188,10 @@
       "link": "https://www.nhcapital.co.kr/customer/customer/customerManageposts/selectManagepostsNoticeList.nh",
       "category": "입찰공고",
       "is_new": false,
-      "crawled_at": "2026-07-02T07:59:18.440559"
+      "crawled_at": "2026-07-03T03:43:15.272679"
     },
     {
-      "id": "nhcapital_ccb48d",
+      "id": "nhcapital_bcf4c0",
       "source_id": "nhcapital",
       "source_name": "NH농협캐피탈",
       "title": "NH농협캐피탈(주) 신사옥 업무용 가구 제작 및 공급 입찰 공고",
@@ -320,10 +200,10 @@
       "link": "https://www.nhcapital.co.kr/customer/customer/customerManageposts/selectManagepostsNoticeList.nh",
       "category": "입찰공고",
       "is_new": false,
-      "crawled_at": "2026-07-02T07:59:18.440613"
+      "crawled_at": "2026-07-03T03:43:15.272740"
     },
     {
-      "id": "nhabgroup_1cc925",
+      "id": "nhabgroup_e1123e",
       "source_id": "nhabgroup",
       "source_name": "농협경제지주",
       "title": "’26년 종돈개량사업소 (불갑GGP)전기 승압 공사 입찰 재공고",
@@ -332,10 +212,10 @@
       "link": "http://www.nhabgroup.comboardList.do?command=view&page=1&boardId=5121866&boardSeq=5873674&id=",
       "category": "입찰공고",
       "is_new": false,
-      "crawled_at": "2026-07-02T07:59:15.607766"
+      "crawled_at": "2026-07-03T03:43:12.477757"
     },
     {
-      "id": "nhabgroup_c12fa6",
+      "id": "nhabgroup_7a9a5d",
       "source_id": "nhabgroup",
       "source_name": "농협경제지주",
       "title": "2026년 식품연구소 검사용 시약 및 소모품 공급업체 선정 입찰공고",
@@ -344,10 +224,10 @@
       "link": "http://www.nhabgroup.comboardList.do?command=view&page=1&boardId=5121866&boardSeq=5873561&id=",
       "category": "입찰공고",
       "is_new": false,
-      "crawled_at": "2026-07-02T07:59:15.607821"
+      "crawled_at": "2026-07-03T03:43:12.477802"
     },
     {
-      "id": "nhfngroup_c7d511",
+      "id": "nhfngroup_a9ad7d",
       "source_id": "nhfngroup",
       "source_name": "NH농협금융지주",
       "title": "「2026년 내부회계관리제도 평가지원 용역」 입찰공고",
@@ -356,10 +236,10 @@
       "link": "https://www.nhfngroup.comboardList.do?command=view&page=1&boardId=5177627&boardSeq=5872578&id=",
       "category": "입찰공고",
       "is_new": false,
-      "crawled_at": "2026-07-02T07:59:11.933807"
+      "crawled_at": "2026-07-03T03:43:09.454219"
     },
     {
-      "id": "nhabgroup_90e86e",
+      "id": "nhabgroup_9de85f",
       "source_id": "nhabgroup",
       "source_name": "농협경제지주",
       "title": "농협경제지주 K-IFRS 제1118호 도입용역 입찰공고",
@@ -368,10 +248,10 @@
       "link": "http://www.nhabgroup.comboardList.do?command=view&page=1&boardId=5121866&boardSeq=5872764&id=",
       "category": "입찰공고",
       "is_new": false,
-      "crawled_at": "2026-07-02T07:59:15.607871"
+      "crawled_at": "2026-07-03T03:43:12.477852"
     },
     {
-      "id": "nhabgroup_162a69",
+      "id": "nhabgroup_0841a6",
       "source_id": "nhabgroup",
       "source_name": "농협경제지주",
       "title": "「2026년 충청남도 좋은 가축 선발 경진대회」행사 대행 용역 입찰 공고",
@@ -380,10 +260,10 @@
       "link": "http://www.nhabgroup.comboardList.do?command=view&page=1&boardId=5121866&boardSeq=5872237&id=",
       "category": "입찰공고",
       "is_new": false,
-      "crawled_at": "2026-07-02T07:59:15.607914"
+      "crawled_at": "2026-07-03T03:43:12.477899"
     },
     {
-      "id": "nhcapital_36a48f",
+      "id": "nhcapital_72d088",
       "source_id": "nhcapital",
       "source_name": "NH농협캐피탈",
       "title": "2026년 06월 산업기계 공개매각 실시 공고",
@@ -392,10 +272,10 @@
       "link": "https://www.nhcapital.co.kr/customer/customer/customerManageposts/selectManagepostsNoticeList.nh",
       "category": "입찰공고",
       "is_new": false,
-      "crawled_at": "2026-07-02T07:59:18.440666"
+      "crawled_at": "2026-07-03T03:43:15.272794"
     },
     {
-      "id": "nhcapital_32c529",
+      "id": "nhcapital_45bcb6",
       "source_id": "nhcapital",
       "source_name": "NH농협캐피탈",
       "title": "NH농협캐피탈 디지털 콘텐츠 제작 및 광고 송출 용역 입찰 공고",
@@ -404,10 +284,10 @@
       "link": "https://www.nhcapital.co.kr/customer/customer/customerManageposts/selectManagepostsNoticeList.nh",
       "category": "입찰공고",
       "is_new": false,
-      "crawled_at": "2026-07-02T07:59:18.440725"
+      "crawled_at": "2026-07-03T03:43:15.272845"
     },
     {
-      "id": "nhabgroup_e4d510",
+      "id": "nhabgroup_9b7b7e",
       "source_id": "nhabgroup",
       "source_name": "농협경제지주",
       "title": "농협VAN시스템 노후 서버 교체 및 S/W 업그레이드 구축 사업",
@@ -416,10 +296,10 @@
       "link": "http://www.nhabgroup.comboardList.do?command=view&page=1&boardId=5121866&boardSeq=5870428&id=",
       "category": "입찰공고",
       "is_new": false,
-      "crawled_at": "2026-07-02T07:59:15.607957"
+      "crawled_at": "2026-07-03T03:43:12.477951"
     },
     {
-      "id": "nhabgroup_73a16a",
+      "id": "nhabgroup_9e41a5",
       "source_id": "nhabgroup",
       "source_name": "농협경제지주",
       "title": "’26년 종돈개량사업소 (불갑GGP)전기 승압 공사",
@@ -428,10 +308,10 @@
       "link": "http://www.nhabgroup.comboardList.do?command=view&page=1&boardId=5121866&boardSeq=5868803&id=",
       "category": "입찰공고",
       "is_new": false,
-      "crawled_at": "2026-07-02T07:59:15.608001"
+      "crawled_at": "2026-07-03T03:43:12.477995"
     },
     {
-      "id": "nhabgroup_08de48",
+      "id": "nhabgroup_dd227b",
       "source_id": "nhabgroup",
       "source_name": "농협경제지주",
       "title": "축산자재 공동구매 경쟁입찰(축산물공판장 지박스)",
@@ -440,10 +320,10 @@
       "link": "http://www.nhabgroup.comboardList.do?command=view&page=1&boardId=5121866&boardSeq=5867834&id=",
       "category": "입찰공고",
       "is_new": false,
-      "crawled_at": "2026-07-02T07:59:15.608044"
+      "crawled_at": "2026-07-03T03:43:12.478040"
     },
     {
-      "id": "nhcapital_262731",
+      "id": "nhcapital_283e7e",
       "source_id": "nhcapital",
       "source_name": "NH농협캐피탈",
       "title": "자동차담보·중고승용 신용평가모형 및 전략 개발 입찰 재공고",
@@ -452,10 +332,10 @@
       "link": "https://www.nhcapital.co.kr/customer/customer/customerManageposts/selectManagepostsNoticeList.nh",
       "category": "입찰공고",
       "is_new": false,
-      "crawled_at": "2026-07-02T07:59:18.440837"
+      "crawled_at": "2026-07-03T03:43:15.272934"
     },
     {
-      "id": "nhcapital_07f359",
+      "id": "nhcapital_0f8a27",
       "source_id": "nhcapital",
       "source_name": "NH농협캐피탈",
       "title": "컨텍센터 도급업체 재선정 입찰공고",
@@ -464,10 +344,10 @@
       "link": "https://www.nhcapital.co.kr/customer/customer/customerManageposts/selectManagepostsNoticeList.nh",
       "category": "입찰공고",
       "is_new": false,
-      "crawled_at": "2026-07-02T07:59:18.440890"
+      "crawled_at": "2026-07-03T03:43:15.272985"
     },
     {
-      "id": "nhcapital_059d55",
+      "id": "nhcapital_23bbd4",
       "source_id": "nhcapital",
       "source_name": "NH농협캐피탈",
       "title": "자동차담보·중고승용 신용평가모형 및 전략 개발 입찰 공고",
@@ -476,10 +356,10 @@
       "link": "https://www.nhcapital.co.kr/customer/customer/customerManageposts/selectManagepostsNoticeList.nh",
       "category": "입찰공고",
       "is_new": false,
-      "crawled_at": "2026-07-02T07:59:18.440941"
+      "crawled_at": "2026-07-03T03:43:15.273033"
     },
     {
-      "id": "nhcapital_8da6e3",
+      "id": "nhcapital_66c5ca",
       "source_id": "nhcapital",
       "source_name": "NH농협캐피탈",
       "title": "NH농협캐피탈 26년 제2차 부실채권 매각 주간사(회계법인) 재입찰 공고_1차 입찰 결과 유찰에 따른 재공고",
@@ -488,10 +368,10 @@
       "link": "https://www.nhcapital.co.kr/customer/customer/customerManageposts/selectManagepostsNoticeList.nh",
       "category": "입찰공고",
       "is_new": false,
-      "crawled_at": "2026-07-02T07:59:18.440991"
+      "crawled_at": "2026-07-03T03:43:15.273083"
     },
     {
-      "id": "nhcapital_4ff2a3",
+      "id": "nhcapital_f21c4e",
       "source_id": "nhcapital",
       "source_name": "NH농협캐피탈",
       "title": "NH농협캐피탈 26년 제2차 부실채권 매각 주간사(회계법인) 입찰 공고",
@@ -500,10 +380,10 @@
       "link": "https://www.nhcapital.co.kr/customer/customer/customerManageposts/selectManagepostsNoticeList.nh",
       "category": "입찰공고",
       "is_new": false,
-      "crawled_at": "2026-07-02T07:59:18.441040"
+      "crawled_at": "2026-07-03T03:43:15.273133"
     },
     {
-      "id": "nhcapital_8accdf",
+      "id": "nhcapital_1c1b30",
       "source_id": "nhcapital",
       "source_name": "NH농협캐피탈",
       "title": "NH농협캐피탈 파일 무해화(CDR) 개발/테스트계 솔루션 구매 입찰공고",
@@ -512,10 +392,10 @@
       "link": "https://www.nhcapital.co.kr/customer/customer/customerManageposts/selectManagepostsNoticeList.nh",
       "category": "입찰공고",
       "is_new": false,
-      "crawled_at": "2026-07-02T07:59:18.441088"
+      "crawled_at": "2026-07-03T03:43:15.273182"
     },
     {
-      "id": "nhcapital_c40ec1",
+      "id": "nhcapital_c9b361",
       "source_id": "nhcapital",
       "source_name": "NH농협캐피탈",
       "title": "[입찰공고] 펀드 기초자산 분해 서비스 용역 재공고",
@@ -524,10 +404,10 @@
       "link": "https://www.nhcapital.co.kr/customer/customer/customerManageposts/selectManagepostsNoticeList.nh",
       "category": "입찰공고",
       "is_new": false,
-      "crawled_at": "2026-07-02T07:59:18.441136"
+      "crawled_at": "2026-07-03T03:43:15.273229"
     },
     {
-      "id": "nhcapital_81463f",
+      "id": "nhcapital_9349df",
       "source_id": "nhcapital",
       "source_name": "NH농협캐피탈",
       "title": "NH농협캐피탈 관리회계 시스템 고도화 입찰공고",
@@ -536,10 +416,10 @@
       "link": "https://www.nhcapital.co.kr/customer/customer/customerManageposts/selectManagepostsNoticeList.nh",
       "category": "입찰공고",
       "is_new": false,
-      "crawled_at": "2026-07-02T07:59:18.441183"
+      "crawled_at": "2026-07-03T03:43:15.273277"
     },
     {
-      "id": "nhfngroup_e62928",
+      "id": "nhfngroup_62af97",
       "source_id": "nhfngroup",
       "source_name": "NH농협금융지주",
       "title": "농협금융 우수직원 해외연수 대행 용역 선정 입찰 공고",
@@ -548,10 +428,10 @@
       "link": "https://www.nhfngroup.comboardList.do?command=view&page=1&boardId=5177627&boardSeq=5839268&id=",
       "category": "입찰공고",
       "is_new": false,
-      "crawled_at": "2026-07-02T07:59:11.933866"
+      "crawled_at": "2026-07-03T03:43:09.454294"
     },
     {
-      "id": "nhfngroup_c53b98",
+      "id": "nhfngroup_2afd4b",
       "source_id": "nhfngroup",
       "source_name": "NH농협금융지주",
       "title": "농협금융 리스크맵(Risk-Map) 구축 프로젝트",
@@ -560,10 +440,10 @@
       "link": "https://www.nhfngroup.comboardList.do?command=view&page=1&boardId=5177627&boardSeq=5828807&id=",
       "category": "입찰공고",
       "is_new": false,
-      "crawled_at": "2026-07-02T07:59:11.933918"
+      "crawled_at": "2026-07-03T03:43:09.454354"
     },
     {
-      "id": "nhfngroup_32bb99",
+      "id": "nhfngroup_4e16b6",
       "source_id": "nhfngroup",
       "source_name": "NH농협금융지주",
       "title": "「농협금융 AI거버넌스 수립 외부용역」 입찰공고",
@@ -572,10 +452,10 @@
       "link": "https://www.nhfngroup.comboardList.do?command=view&page=1&boardId=5177627&boardSeq=5826999&id=",
       "category": "입찰공고",
       "is_new": false,
-      "crawled_at": "2026-07-02T07:59:11.933966"
+      "crawled_at": "2026-07-03T03:43:09.454411"
     },
     {
-      "id": "nhfngroup_5cc361",
+      "id": "nhfngroup_90770d",
       "source_id": "nhfngroup",
       "source_name": "NH농협금융지주",
       "title": "2026년 농협금융 자체정상화계획 갱신 프로젝트 제안 요청 공고(재공고)",
@@ -584,10 +464,10 @@
       "link": "https://www.nhfngroup.comboardList.do?command=view&page=1&boardId=5177627&boardSeq=5825649&id=",
       "category": "입찰공고",
       "is_new": false,
-      "crawled_at": "2026-07-02T07:59:11.934011"
+      "crawled_at": "2026-07-03T03:43:09.454473"
     },
     {
-      "id": "nhfngroup_6cab1f",
+      "id": "nhfngroup_3550e3",
       "source_id": "nhfngroup",
       "source_name": "NH농협금융지주",
       "title": "2026년 농협금융 자체정상화계획 갱신 프로젝트 제안 요청 공고",
@@ -596,10 +476,10 @@
       "link": "https://www.nhfngroup.comboardList.do?command=view&page=1&boardId=5177627&boardSeq=5820807&id=",
       "category": "입찰공고",
       "is_new": false,
-      "crawled_at": "2026-07-02T07:59:11.934055"
+      "crawled_at": "2026-07-03T03:43:09.454542"
     },
     {
-      "id": "nhfngroup_f47b75",
+      "id": "nhfngroup_5c7888",
       "source_id": "nhfngroup",
       "source_name": "NH농협금융지주",
       "title": "『NH농협금융 글로벌사업 경쟁력 강화 중장기전략 수립 컨설팅』 입찰공고",
@@ -608,10 +488,10 @@
       "link": "https://www.nhfngroup.comboardList.do?command=view&page=1&boardId=5177627&boardSeq=5802340&id=",
       "category": "입찰공고",
       "is_new": false,
-      "crawled_at": "2026-07-02T07:59:11.934100"
+      "crawled_at": "2026-07-03T03:43:09.454607"
     },
     {
-      "id": "nhfngroup_aef619",
+      "id": "nhfngroup_d9d768",
       "source_id": "nhfngroup",
       "source_name": "NH농협금융지주",
       "title": "농협금융지주 업무용 가구 제작 및 공급 업체선정 입찰공고(재공고)",
@@ -620,10 +500,10 @@
       "link": "https://www.nhfngroup.comboardList.do?command=view&page=1&boardId=5177627&boardSeq=5794364&id=",
       "category": "입찰공고",
       "is_new": false,
-      "crawled_at": "2026-07-02T07:59:11.934150"
+      "crawled_at": "2026-07-03T03:43:09.454682"
     },
     {
-      "id": "nhfngroup_5a0714",
+      "id": "nhfngroup_8b9ea2",
       "source_id": "nhfngroup",
       "source_name": "NH농협금융지주",
       "title": "농협금융지주 업무용 가구 제작 및 공급 입찰공고",
@@ -632,10 +512,10 @@
       "link": "https://www.nhfngroup.comboardList.do?command=view&page=1&boardId=5177627&boardSeq=5790515&id=",
       "category": "입찰공고",
       "is_new": false,
-      "crawled_at": "2026-07-02T07:59:11.934195"
+      "crawled_at": "2026-07-03T03:43:09.454748"
     },
     {
-      "id": "nhfngroup_3c2fa6",
+      "id": "nhfngroup_759955",
       "source_id": "nhfngroup",
       "source_name": "NH농협금융지주",
       "title": "농협금융 모바일앱 경쟁력 평가 용역 입찰공고",
@@ -644,10 +524,10 @@
       "link": "https://www.nhfngroup.comboardList.do?command=view&page=1&boardId=5177627&boardSeq=5784047&id=",
       "category": "입찰공고",
       "is_new": false,
-      "crawled_at": "2026-07-02T07:59:11.934244"
+      "crawled_at": "2026-07-03T03:43:09.454803"
     },
     {
-      "id": "nhfngroup_8cae91",
+      "id": "nhfngroup_a52f31",
       "source_id": "nhfngroup",
       "source_name": "NH농협금융지주",
       "title": "농협금융지주 신규 사무공간 조성 설계용역",
@@ -656,10 +536,10 @@
       "link": "https://www.nhfngroup.comboardList.do?command=view&page=1&boardId=5177627&boardSeq=5767461&id=",
       "category": "입찰공고",
       "is_new": false,
-      "crawled_at": "2026-07-02T07:59:11.934288"
+      "crawled_at": "2026-07-03T03:43:09.454857"
     },
     {
-      "id": "nhfngroup_93e089",
+      "id": "nhfngroup_28aedb",
       "source_id": "nhfngroup",
       "source_name": "NH농협금융지주",
       "title": "(재공고) 농협금융지주 달력·수첩류 제작·공급 용역",
@@ -668,10 +548,10 @@
       "link": "https://www.nhfngroup.comboardList.do?command=view&page=1&boardId=5177627&boardSeq=5747292&id=",
       "category": "입찰공고",
       "is_new": false,
-      "crawled_at": "2026-07-02T07:59:11.934331"
+      "crawled_at": "2026-07-03T03:43:09.454915"
     },
     {
-      "id": "nhfngroup_1e05b3",
+      "id": "nhfngroup_eb10a9",
       "source_id": "nhfngroup",
       "source_name": "NH농협금융지주",
       "title": "「그룹 공동 생성형 AI PoC 환경 구축」 입찰공고",
@@ -680,10 +560,10 @@
       "link": "https://www.nhfngroup.comboardList.do?command=view&page=1&boardId=5177627&boardSeq=5746600&id=",
       "category": "입찰공고",
       "is_new": false,
-      "crawled_at": "2026-07-02T07:59:11.934377"
+      "crawled_at": "2026-07-03T03:43:09.454966"
     },
     {
-      "id": "nhfngroup_5374d9",
+      "id": "nhfngroup_e120dd",
       "source_id": "nhfngroup",
       "source_name": "NH농협금융지주",
       "title": "『농협금융 시니어 고객전략 수립』컨설팅 입찰공고",
@@ -692,7 +572,7 @@
       "link": "https://www.nhfngroup.comboardList.do?command=view&page=1&boardId=5177627&boardSeq=5736976&id=",
       "category": "입찰공고",
       "is_new": false,
-      "crawled_at": "2026-07-02T07:59:11.934420"
+      "crawled_at": "2026-07-03T03:43:09.455016"
     }
   ]
 }
